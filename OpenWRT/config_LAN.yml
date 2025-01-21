@@ -1,0 +1,26 @@
+# Playbook Ansible para configuração do IP da LAN em roteadores com OpenWRT
+
+- name: Configuração LAN
+  hosts: openwrt
+  remote_user: root
+  tasks:
+   - name: alterar LAN
+     ansible.builtin.shell:
+       cmd:
+         uci set network.lan.proto=static &&
+         uci set network.lan.ipaddr=10.10.10.1 &&
+         uci set network.lan.netmask=255.255.255.0 &&
+         uci commit network
+
+   - name: reboot roteador
+     ansible.builtin.command:
+       cmd: /etc/init.d/network restart
+
+   - name: verificar configurações LAN
+     ansible.builtin.shell:
+       cmd: uci show network.lan
+     register: lan_config # Guarda o retorno do comando uci na variavel lan_config
+
+   - name: show LAN config
+     ansible.builtin.debug:
+       msg: "{{ lan_config.stdout }}" # Mostra o conteúdo da variavel

@@ -1,2 +1,2 @@
 # Ansible
-Arquivos yaml usados em minhas configurações em Ansible
+Arquivos de configuração para sistema Ansible

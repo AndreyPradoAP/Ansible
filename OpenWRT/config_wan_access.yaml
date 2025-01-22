@@ -1,0 +1,22 @@
+# Playbook Ansible para habilitar acesso à interface WEB através da WAN em um roteador OpenWRT
+
+- name: habilitar acesso WAM
+  hosts: openwrt
+  remote_user: root
+  tasks:
+    - name: habilitar acesso WAN
+      ansible.builtin.shell:
+        cmd:
+          cd /etc/config/ &&
+          cat <<EOF >> firewall # Insere o bloco de configuração no arquivo firewall
+          config rule
+                  option name 'Allow-WEB_Access'
+                  option src 'wan'
+                  option target 'ACCEPT'
+                  list src_ip '0.0.0.0/0'
+                  list proto 'all'
+          EOF
+
+    - name: recarregar firewall
+      ansible.builtin.shell:
+        cmd: /etc/init.d/firewall reload

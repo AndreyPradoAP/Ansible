@@ -8,13 +8,9 @@
      ansible.builtin.shell:
        cmd:
          uci set network.lan.proto=static &&
-         uci set network.lan.ipaddr=10.10.10.1 &&
+         uci set network.lan.ipaddr=192.168.0.1 &&
          uci set network.lan.netmask=255.255.255.0 &&
          uci commit network
-
-   - name: reboot roteador
-     ansible.builtin.command:
-       cmd: /etc/init.d/network restart
 
    - name: verificar configurações LAN
      ansible.builtin.shell:

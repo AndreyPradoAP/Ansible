@@ -1,0 +1,23 @@
+# Playbook Ansible para configurar a WAN de forma estática em um roteador OpenWRT com 
+- name: Config WAN roteador OpenWRT
+  hosts: router
+  remote_user: root
+  tasks:
+    - name: config WAN
+      ansible.builtin.shell:
+        cmd:
+          uci set network.wan.proto=static &&
+          uci set network.wan.ipaddr=x.x.x.x &&
+          uci set network.wan.netmask=255.255.255.0 &&
+          uci set network.wan.gateway=x.x.x.x &&
+          uci set network.wan.dns="8.8.8.8 8.8.4.4" &&
+          uci commit network
+
+   - name: verificar configuração WAN
+     ansible.builtin.shell:
+       cmd: uci show network.wan
+     register: wan_config
+
+   - name: mostrar configurações LAN
+     ansible.builtin.debug:
+       msg: "{{ wan_config.stdout }}"
